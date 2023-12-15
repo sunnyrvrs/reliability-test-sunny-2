@@ -1,0 +1,218 @@
+.App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
+
+.todo__container {
+    height: 600px;
+    width: 500px;
+    -webkit-box-shadow: 5px 5px 30px 0px rgba(0,0,0,0.55);
+    -moz-box-shadow: 5px 5px 30px 0px rgba(0,0,0,0.55);
+    box-shadow: 5px 5px 30px 0px rgba(0,0,0,0.55);
+    border-radius: 5%;
+}
+
+.header__ {
+    &container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 30px;
+        height: 90px;
+    }
+
+    &filter {
+        &--icon {
+            width: 30px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    }
+    &date {
+        &--title {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            img {
+                height: 35px;
+                margin-right: 15px;
+            }
+            h1 {
+                font-size: 23px;
+                color: rgb(52, 52, 52);
+            }
+        }
+        p {
+            text-align: left;
+            margin: 0px;
+            margin-top: 0px;
+        }
+    }
+}
+
+.body__ {
+    &container {
+        background-image: url('../background_image.jpg');
+        background-size: cover;
+        background-repeat: no-repeat; 
+        background-position: center bottom;
+        width: 100%;
+        height: 100%;
+        border-radius: 0% 0% 5% 5%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    &top {
+        margin-top: 25px;
+        max-height: 500px;
+        overflow: scroll;
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+    &bottom {
+        border-radius: 25px;
+        &--container {
+            display: flex;
+            flex-direction: row;
+            height: 35px;
+            justify-content: space-between;
+            padding: 25px;
+        }
+        &--plusicon {
+            cursor: pointer;
+            position: relative;
+            width: 50px;
+
+            &::before,
+            &::after {
+                content: '';
+                position: absolute;
+                left: -2px;
+                top: -2px;
+                background: linear-gradient(45deg, #e6fb04, #ff6600, #00ff66, #00ffff, #ff00ff, #ff0099, #6e0dd0, #ff3300, #099fff);
+                background-size: 400%;
+                width: calc(100%);
+                height: calc(100% + 6px);
+                z-index: 2;
+                animation: animate 20s linear infinite;
+                border-radius: 100%;
+            }
+
+            &::after {
+                filter: blur(40px);
+            }
+
+            img {
+                width: 35px;
+                z-index: 3;
+                position: absolute;
+                left: 1px;
+            }
+        }
+        &--input {
+            border-radius: 10px;
+            width: 100%;
+            margin-right: 10px;
+            padding: 10px;
+        }
+    }
+}
+
+.task__ {
+    &active {
+        display: none;
+    }
+    &container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        background-color: white;
+        margin: 5px 25px;
+        padding: 0px 15px;
+        overflow: auto;
+        height: 60px;
+    }
+    &description {
+        outline: none;
+        border: 1px solid white;
+        width: 200px;
+    }
+    &right {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+    &deleteIcon {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+    &editIcon {
+        width: 20px;
+        height: 20px;
+        margin-right: 15px;
+    }
+    &editWindow {
+        position: absolute;
+        background-color: white;
+        border: 1px solid grey;
+        height: 25px;
+        width: 350px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 20px;
+        padding-top: 0px;
+        display: none;
+    }
+    &completedIcon {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+    &prioritizeIcon {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+    &id {
+        display: none;
+    }
+    &select {
+        margin-right: 10px;
+        cursor: pointer;
+    }
+}
+
+.priority-dropdown-container {
+    display: none;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    width: 300px;
+    height: 50px;
+    border: 1px solid gray;
+}
+
+@keyframes animate {
+    0%{
+        background-position: 0 0;
+    }
+    50%{
+        background-position: 400% 0;
+    }
+    100%{
+        background-position: 0 0;
+    }
+}
