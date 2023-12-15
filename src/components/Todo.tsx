@@ -6,6 +6,10 @@ import deleteIcon from "../images/remove.png";
 import editIcon from "../images/edit.png";
 import prioritizeIcon from "../images/prioritize.png";
 import "../../public/CSS/todo.css";
+import {
+    useQuery
+} from '@tanstack/react-query';
+import axios from 'axios';
 
 interface TodoItem {
     description: string;
@@ -15,16 +19,30 @@ interface TodoItem {
 
 function Todo() {
 
+    const { data, refetch } = useQuery({
+        queryKey: ['tasksData'],
+        queryFn: () =>
+          axios
+            .get('http://localhost:3000/todos/')
+            .then((res) => res.data),
+    });
+
     const [currentDate, setCurrentDate] = useState<string>('');
     const [todos, setTodos] = useState<TodoItem[]>([]);
 
+    // Effect for setting the current date
     useEffect(() => {
         const now = new Date();
         const formattedDate = format(now, "EEEE, MMMM do");
         setCurrentDate(formattedDate);
-        // Fetch todos from the API
-        fetchTodos();
-    }, [todos]);
+    }, []); // Empty dependency array, runs only once on mount
+
+    // Update todos when data is fetched
+    useEffect(() => {
+        if (data) {
+            setTodos(data);
+        }
+    }, [data]); // Dependency on data
 
     function capitalize(str:string): string {
         if (!str) return str;
@@ -83,6 +101,7 @@ function Todo() {
             }
     
             const result = await response.json();
+            await refetch();
             console.log('New todo created:', result);
         } catch (error) {
             console.error('Error creating new todo:', error);
@@ -137,29 +156,10 @@ function Todo() {
             }
     
             const result = await response.json();
+            await refetch();
             console.log('Result from the backend:', result);
-            
         } catch (error) {
             console.error('Error updating todo:', error);
-        }
-    };
-    
-
-    const fetchTodos = async () => {
-        try {
-            const response = await fetch('http://localhost:3000/todos/');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data: TodoItem[] = await response.json();
-            setTodos(data); // Assuming setTodos is a state setter function for TodoItem[]
-    
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error('Error fetching data:', error.message);
-            } else {
-                console.error('Error fetching data:', error);
-            }
         }
     };
 
@@ -178,6 +178,7 @@ function Todo() {
     
             // Update the local state to remove the deleted todo
             setTodos(prevTodos => prevTodos.filter(todo => todo._id !== deletedTodoId));
+            await refetch();
         } catch (error) {
             if (error instanceof Error) {
                 console.error('Error deleting todo:', error.message);
