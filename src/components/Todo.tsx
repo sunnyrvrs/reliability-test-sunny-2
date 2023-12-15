@@ -5,7 +5,7 @@ import plusIcon from '../images/plus.png';
 import deleteIcon from "../images/remove.png";
 import editIcon from "../images/edit.png";
 import prioritizeIcon from "../images/prioritize.png";
-import "../../public/CSS/todo.css";
+import "../../CSS/todo.css";
 import {
     useQuery
 } from '@tanstack/react-query';
@@ -270,7 +270,6 @@ function Todo() {
                 )}
 
                 
-                    
                 </div>
                 {auth.token}
                 <div className="body__bottom">
