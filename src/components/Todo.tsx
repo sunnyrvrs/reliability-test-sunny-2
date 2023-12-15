@@ -10,12 +10,29 @@ import {
     useQuery
 } from '@tanstack/react-query';
 import axios from 'axios';
+import { create } from 'zustand'
 
 interface TodoItem {
     description: string;
     priority: string;
     _id: string;
 }
+
+interface AuthState {
+    auth: {
+        token: string | null;
+        expirationTime: string | null;
+    };
+    setAuth: (token: string | null, expirationTime: string | null) => void;
+}
+
+const useAuthStore = create<AuthState>((set) => ({
+    auth: {
+        token: null,
+        expirationTime: null,
+    },
+    setAuth: (token, expirationTime) => set(() => ({ auth: { token, expirationTime } })),
+}));
 
 function Todo() {
 
@@ -29,6 +46,7 @@ function Todo() {
 
     const [currentDate, setCurrentDate] = useState<string>('');
     const [todos, setTodos] = useState<TodoItem[]>([]);
+    const { auth, setAuth } = useAuthStore();
 
     // Effect for setting the current date
     useEffect(() => {
@@ -43,6 +61,14 @@ function Todo() {
             setTodos(data);
         }
     }, [data]); // Dependency on data
+
+    useEffect(() => {
+        // Mock login process
+        const mockToken = "mock-jwt-token-19846394725274";
+        const mockExpiration = new Date().toISOString(); // you should replace this with actual expiration logic
+
+        setAuth(mockToken, mockExpiration);
+    }, []);
 
     function capitalize(str:string): string {
         if (!str) return str;
@@ -202,7 +228,10 @@ function Todo() {
             <div className="body__container">
                 <div className="body__top">
 
-                {todos.map((task) => (
+                {auth.token ? (
+                    <div>
+                        {/* Content you want to display when auth.token exists */}
+                        {todos.map((task) => (
                     <div className="task__container">
                         <p>{task["description"]}</p>
                         <p>{capitalize(task["priority"])}</p>
@@ -235,8 +264,15 @@ function Todo() {
                         </div>
                     </div>
                 ))}
+                    </div>
+                ) : (
+                    null // or replace with any alternative component/view for when auth.token does not exist
+                )}
+
+                
                     
                 </div>
+                {auth.token}
                 <div className="body__bottom">
                     <div className="body__bottom--container">
                         <input className="body__bottom--input"/>

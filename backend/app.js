@@ -47,7 +47,7 @@ app.patch('/todos/:id', async (req, res) => {
     try {
         const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!todo) {
-        return res.status(404).send();
+            return res.status(404).send();
         }
         res.send(todo);
     } catch (error) {
